@@ -1,19 +1,20 @@
 package com.it.tests;
 
-import com.it.pages.BasePage;
-import com.it.pages.DashboardPage;
-import com.it.pages.LoginPage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.chrome.ChromeDriver;
+import com.it.users.User;
+import com.it.users.UserFactory;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class MyTest extends BaseTest {
 
     @Test
     public void testName() {
-        app.login.login("ittest2","337774a");
-        Assert.assertEquals(app.dashboard.getLinkUserEmail(),"ittest2@i.ua");
+        List<User> users = UserFactory.getRandomUsers(10);
+        users.forEach(System.out::println);
+        app.login.login(validUser);
+        Assert.assertEquals(app.dashboard.getLinkUserEmail(),validUser.email);
     }
 }
