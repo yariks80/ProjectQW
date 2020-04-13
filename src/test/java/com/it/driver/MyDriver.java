@@ -1,14 +1,18 @@
 package com.it.driver;
 
 import com.it.common.Constants;
+import io.qameta.allure.Allure;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.yandex.qatools.allure.Allure;
-import ru.yandex.qatools.allure.annotations.Attachment;
+
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -137,14 +141,22 @@ public class MyDriver implements WebDriver {
         }
         return result;
     }
-    public void takeSnapShot()  {
+
+    public void takeSnapShot() {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
-            FileUtils.copyFile(scrFile, new File("screenshot//screen" + count + ".png"));
+            FileUtils.copyFile(scrFile, new File("build//screenshot//screen" + count + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-           count++;
+        Path content = Paths.get("build//screenshot//screen" + count + ".png");
+        try (InputStream is = Files.newInputStream(content)) {
+            Allure.addAttachment("My attachment", is);
+        } catch (IOException e) {
+            //NOP
+        }
+        count++;
+
 
     }
 }
